@@ -6,6 +6,7 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
+// FIXME Move to utils.go
 func failOnError(err error, msg string) {
 	if err != nil {
 		log.Panicf("%s: %s\n", msg, err)
@@ -21,7 +22,7 @@ func main() {
 	failOnError(err, "Failed to open channel")
 	defer ch.Close()
 
-	// Same queue as the one in the publisher. Best practice to declare it in a separate file to ensure consistency?
+	// FIXME Same queue as the one in the publisher. Best practice to declare it in a separate file to ensure consistency? YES, fix it later, move it to config.go
 	q, err := ch.QueueDeclare(
 		"hello", //name
 		false,   //durable
@@ -43,7 +44,9 @@ func main() {
 	)
 	failOnError(err, "Failed to register a consumer")
 
-	// TODO What is chan?
+	// TODO What is chan? Channels
+	// - Channels are fundamental structures in goroutines
+	// - Pipes for sync data trasmission
 	var forever chan struct{}
 
 	// Since messages are push async, read is done in a go routine
@@ -54,5 +57,5 @@ func main() {
 	}()
 
 	log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
-	<-forever // TODO What is this notation?
+	<-forever // TODO What is this notation? Consume values from a channel. If it was forever <- value it would be sending a value to the channel (producing)
 }
