@@ -26,12 +26,12 @@ func main() {
 
 	// FIXME Same queue as the one in the publisher. Best practice to declare it in a separate file to ensure consistency? YES, fix it later, move it to config.go
 	q, err := ch.QueueDeclare(
-		"hello", //name
-		false,   //durable
-		false,   //delete when unused
-		false,   //exclusive
-		false,   // no-wait
-		nil,     //arguments
+		"task_queue", //name - RabbitMQ won't let redefinition of existing queue
+		true,         //durable
+		false,        //delete when unused
+		false,        //exclusive
+		false,        // no-wait
+		nil,          //arguments
 	)
 	failOnError(err, "Failed to declare a queue")
 

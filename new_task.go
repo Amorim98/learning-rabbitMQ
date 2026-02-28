@@ -40,12 +40,12 @@ func main() {
 	defer ch.Close() // defer guarantees the function is executed right after it
 
 	q, err := ch.QueueDeclare(
-		"hello",
-		false,
-		false,
-		false,
-		false,
-		nil,
+		"task_queue", //name
+		true,         //durable
+		false,        //delete when unused
+		false,        //exclusive
+		false,        //no-wait
+		nil,          //arguments
 	)
 	failOnError(err, "Failed to declare a queue")
 
@@ -59,7 +59,7 @@ func main() {
 		false,  // mandatory
 		false,  // immediate
 		amqp.Publishing{
-			DeliveryMode: amqp.Persistent, // TODO What does this change?
+			DeliveryMode: amqp.Persistent, // TODO What does this change? A: Guarantees (not 100%) that messages are not lost in the event of the RabbitMQ going offline -> The queue also needs to be durable.
 			ContentType:  "text/plain",
 			Body:         []byte(body),
 		},
