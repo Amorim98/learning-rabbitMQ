@@ -37,12 +37,12 @@ func main() {
 
 	msgs, err := ch.Consume(
 		q.Name, // queue
-		"",
-		true,
-		false,
-		false,
-		false,
-		nil,
+		"",     // consumer
+		false,  // auto-ack - changed to false to use manual ACK (autoAck considers the message acknowledged as soon as it is delivered to the consumer)
+		false,  // exclusive
+		false,  // no-local
+		false,  // no-wait
+		nil,    // args
 	)
 	failOnError(err, "Failed to register a consumer")
 
@@ -60,6 +60,7 @@ func main() {
 			t := time.Duration(dotCount)
 			time.Sleep(t * time.Second)
 			log.Printf("Done")
+			d.Ack(false) // ACKs single delivery - Ack acknowledges all message received prior to the delivery tag when multiple is true. Must be sent on the same channel that received the delivery.
 		}
 	}()
 
