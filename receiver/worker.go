@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"log"
+	"time"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )
@@ -53,6 +55,11 @@ func main() {
 	go func() {
 		for d := range msgs {
 			log.Printf("Received a message: %s\n", d.Body)
+			// Simulating a task by counting dots on a string as the execution time
+			dotCount := bytes.Count(d.Body, []byte("."))
+			t := time.Duration(dotCount)
+			time.Sleep(t * time.Second)
+			log.Printf("Done")
 		}
 	}()
 
