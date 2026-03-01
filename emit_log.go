@@ -21,7 +21,6 @@ func failOnError(err error, msg string) {
 
 func bodyFrom(args []string) string {
 	var s string
-	// os.Args[0] contains the program name while args[1:] contains the user arguments
 	if len(args) < 2 || os.Args[1] == "" {
 		s = "hello"
 	} else {
@@ -37,31 +36,31 @@ func main() {
 
 	ch, err := conn.Channel()
 	failOnError(err, "Failed to open a channel")
-	defer ch.Close() // defer guarantees the function is executed right after it
+	defer ch.Close()
 
-	q, err := ch.QueueDeclare(
-		"task_queue", //name
-		true,         //durable
-		false,        //delete when unused
-		false,        //exclusive
-		false,        //no-wait
-		nil,          //arguments
+	err = ch.ExchangeDeclare(
+		"logs",   //name
+		"fanout", //type
+		true,     //durable
+		false,    //auto-deleted
+		false,    //internal
+		false,    //no-wait
+		nil,      //arguments
 	)
-	failOnError(err, "Failed to declare a queue")
+	failOnError(err, "Failed to declare an exchange")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	body := bodyFrom(os.Args)
 	err = ch.PublishWithContext(ctx,
-		"",     // exachange
-		q.Name, // routine key
+		"logs", // exchange
+		"",     // routine key
 		false,  // mandatory
 		false,  // immediate
 		amqp.Publishing{
-			DeliveryMode: amqp.Persistent, // TODO What does this change? A: Guarantees (not 100%) that messages are not lost in the event of the RabbitMQ going offline -> The queue also needs to be durable.
-			ContentType:  "text/plain",
-			Body:         []byte(body),
+			ContentType: "text/plain",
+			Body:        []byte(body),
 		},
 	)
 	failOnError(err, "Failed to publish a message")
