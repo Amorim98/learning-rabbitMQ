@@ -32,7 +32,7 @@ func bodyFrom(args []string) string {
 func severityFrom(args []string) string {
 	var s string
 	if (len(args) < 2) || os.Args[1] == "" {
-		s = "info"
+		s = "anonymous.info"
 	} else {
 		s = os.Args[1]
 	}
@@ -49,13 +49,13 @@ func main() {
 	defer ch.Close()
 
 	err = ch.ExchangeDeclare(
-		"logs_direct", //name
-		"direct",      //type
-		true,          //durable
-		false,         //auto-deleted
-		false,         //internal
-		false,         //no-wait
-		nil,           //arguments
+		"logs_topic", //name
+		"topic",      //type
+		true,         //durable
+		false,        //auto-deleted
+		false,        //internal
+		false,        //no-wait
+		nil,          //arguments
 	)
 	failOnError(err, "Failed to declare an exchange")
 
@@ -64,7 +64,7 @@ func main() {
 
 	body := bodyFrom(os.Args)
 	err = ch.PublishWithContext(ctx,
-		"logs_direct",         // exchange
+		"logs_topic",          // exchange
 		severityFrom(os.Args), // routing key
 		false,                 // mandatory
 		false,                 // immediate
