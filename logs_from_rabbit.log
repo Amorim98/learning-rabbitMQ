@@ -1,2 +1,6 @@
-2026/03/01 16:50:58  [*] Waiting for messages. To exit press CTRL+C
-2026/03/01 16:51:22  [x] hello
+2026/03/01 17:28:27 Binding queue amq.gen-JrYOeyhoNsY8MKiEwkO-Eg to exchange logs_direct with routing key warning
+2026/03/01 17:28:27 Binding queue amq.gen-JrYOeyhoNsY8MKiEwkO-Eg to exchange logs_direct with routing key error
+2026/03/01 17:28:27  [*] Waiting for messages. To exit press CTRL+C
+2026/03/01 17:29:40  [x] RUNgit add .git add .
+2026/03/01 17:30:29  [x] it's getting crazy...
+signal: interrupt

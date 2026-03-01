@@ -1,0 +1,50 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go-build*
+/go-build
+
+# Output of the go coverage tool
+*.html
+*.css
+*.js
+*.png
+*.jpg
+*.svg
+*.ico
+
+# Go workspace file
+go.work
+go.work.sum
+
+# Vendor directory (if using go modules)
+# vendor/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Build output
+/bin/
+/dist/
+
+# Test binary (created with go test -c)
+*.test
+
+# Output of the go coverage tool
+coverage.txt
